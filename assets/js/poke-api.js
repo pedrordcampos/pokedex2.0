@@ -12,6 +12,13 @@ function convertPokeApiDetailToPokemon(pokeDetail) {
     pokemon.type = type
     pokemon.photo = pokeDetail.sprites.other.dream_world.front_default
 
+    const stats = pokeDetail.stats.map((stat) => ({
+        name: stat.stat.name,
+        base_stat: stat.base_stat
+      }))
+    
+    pokemon.stats = stats
+
     return pokemon
 }
 
@@ -25,21 +32,6 @@ pokeApi.getPokemons = (offset = 0, limit = 5) => {
 
 const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
 
-/*  Primeira forma
-    fetch(url)
-    .then(function (response) {
-        response.json().then(function (responseBody) {
-            console.log(responseBody)
-        })
-    })
-    .catch(function (error) {
-        console.log(error)
-    })
-    .finally(function (){
-        console.log('Requisição concluída!')
-    }) 
-*/
-
     return fetch(url) // espera uma promisse
             .then((response) => response.json()) // converte a promisse em um objeto json
             .then((jsonBody) => jsonBody.results) // pega o argumento results do objeto
@@ -48,10 +40,3 @@ const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
             .then((pokemonsDetails) => pokemonsDetails)
 }
 
-// Promise.all([
-//     fetch('https://pokeapi.co/api/v2/pokemon/1'),
-//     fetch('https://pokeapi.co/api/v2/pokemon/2'),
-
-// ]).then(results => {
-//     console.log(results)
-// })
